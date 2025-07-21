@@ -1,7 +1,7 @@
 
 <div align="center">
 
-# 🚀 فعال سازی تانل میکروتیک به اوبونتو با GRE (IPv4 & IPv6) 🚀
+# 🚀 فعال سازی تانل میکروتیک به اوبونتو با GRE (IPv4 & IPv6)
 
 ![Ubuntu](https://img.shields.io/badge/Ubuntu-Server-orange?logo=ubuntu&logoColor=white)
 ![MikroTik](https://img.shields.io/badge/RouterOS-7.x-blue?logo=mikrotik&logoColor=white)
