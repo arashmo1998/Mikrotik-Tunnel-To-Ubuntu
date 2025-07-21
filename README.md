@@ -1,7 +1,7 @@
 
 <div align="center">
 
-# 🚀 فعال سازی تانل میکروتیک به اوبونتو با GRE (IPv4 & IPv6) 
+# 🚀 فعال سازی تانل میکروتیک به اوبونتو با GRE (IPv4 & IPv6) 🚀
 
 ![Ubuntu](https://img.shields.io/badge/Ubuntu-Server-orange?logo=ubuntu&logoColor=white)
 ![MikroTik](https://img.shields.io/badge/RouterOS-7.x-blue?logo=mikrotik&logoColor=white)
@@ -21,7 +21,7 @@
 
 ---
 
-## 🚀 نحوه استفاده
+## 🚀 نحوه استفاده  (IPv4)
 
 ### ✅ 1. سرور خارج (اوبونتو)
 
@@ -103,8 +103,93 @@ ping 10.10.10.1
 /ip firewall nat add chain=dstnat protocol=tcp dst-port=!8291 action=dst-nat to-addresses=10.10.10.2
 ```
 
+
 ---
 
+<div align="center">
+
+## 🔥 تانل GRE بر روی IPv6 🔥
+
+![IPv6](https://img.shields.io/badge/IPv6-Full%20Support-blueviolet?logo=ipv6&logoColor=white)
+
+✨ این بخش دقیقاً مشابه مراحل IPv4 است و تنها تفاوت آن استفاده از آدرس‌های IPv6 برای ساخت تانل است.
+
+</div>
+
+---
+
+## 🚀 نحوه استفاده (IPv6)
+
+### ✅ 1. سرور خارج (اوبونتو)
+
+- ابتدا دستور زیر را اجرا کنید تا تانل GRE با IPv6 ساخته شود:
+
+> ⚠️ **نکته:** `[IPv6-IRAN]` = آی‌پی پابلیک IPv6 ایران | `[IPv6-KHAREJ]` = آی‌پی پابلیک IPv6 خارج
+
+```shell
+sudo ip -6 tunnel add GRE6Tun_IR mode ip6gre remote [IPv6-IRAN] local [IPv6-KHAREJ]
+sudo ip addr add 192.168.55.2/30 dev GRE6Tun_IR
+sudo ip link set GRE6Tun_IR mtu 1400
+sudo ip link set GRE6Tun_IR up
+nohup ping 192.168.55.1 &
+```
+
+---
+
+### ✅ 2. سرور ایران (میکروتیک)
+
+- وارد ترمینال میکروتیک شوید و دستورات زیر را وارد کنید:
+
+> ⚠️ **نکته:** `[IPv6-IRAN]` = آی‌پی پابلیک IPv6 ایران | `[IPv6-KHAREJ]` = آی‌پی پابلیک IPv6 خارج
+
+```shell
+/interface gre6 add name=GRE6Tun_IR local=[IPv6-IRAN] remote=[IPv6-KHAREJ] mtu=1400
+/ip address add address=192.168.55.1/30 interface=GRE6Tun_IR
+```
+
+✅ پس از اجرای صحیح، وضعیت اینترفیس باید **R (RUN)** باشد.
+
+---
+
+<div align="center">
+
+### 🌐 آیپی‌های داخلی (تانل IPv6)
+
+| سرور | آیپی داخلی |
+|------|------------|
+| 🇮🇷 ایران | `192.168.55.1` |
+| 🌍 خارج | `192.168.55.2` |
+
+</div>
+
+---
+
+### ✅ تست پینگ
+
+**سرور ایران:**
+
+```shell
+ping 192.168.55.2
+```
+
+**سرور خارج:**
+
+```shell
+ping 192.168.55.1
+```
+
+---
+
+### 🔄 ارسال ترافیک ورودی میکروتیک به سرور مقصد (IPv6)
+
+> ⚠️ اگر پورت `Winbox` شما متفاوت است، مقدار `dst-port` را تغییر دهید.
+
+```shell
+/ip firewall nat add chain=srcnat action=masquerade
+/ip firewall nat add chain=dstnat protocol=tcp dst-port=!8291 action=dst-nat to-addresses=192.168.55.2
+```
+
+---
 <div align="center">
 
 ✅ **نویسنده:** [Arash Mohebbati](https://github.com/arashmohebbati)  
